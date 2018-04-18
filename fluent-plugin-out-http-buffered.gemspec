@@ -6,11 +6,10 @@ Gem::Specification.new do |s|
   s.version     = File.read("VERSION").strip
   s.date        = '2013-05-13'
   s.summary     = "Fluentd http buffered output plugin"
-  s.description = "Send fluent buffered logs to an http endpoint"
-  s.authors     = ["Alexander Blagoev"]
-  s.email       = 'alexander.i.blagoev@gmail.com'
-  s.homepage    =
-    'http://github.com/ablagoev/fluent-plugin-out-http-buffered'
+  s.description = "Fork of Alexander Blagoev's buffered output plugin from http://github.com/ablagoev/fluent-plugin-out-http-buffered. Send fluent buffered logs to an http endpoint"
+  s.authors     = ["John Gibson", "Alexander Blagoev"]
+  s.email       = 'john.gibson@lucidworks.com'
+  s.homepage    = 'https://github.com/lucidworks/fluent-plugin-out-http-buffered'
 
   s.files       = [
     "lib/fluent/plugin/out_http_buffered.rb",

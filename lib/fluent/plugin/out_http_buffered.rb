@@ -69,8 +69,6 @@ module Fluent
         data << [tag, time, record]
       end
 
-      request = create_request(data)
-
       begin
         response = @http.start do |http|
           request = create_request(data)
