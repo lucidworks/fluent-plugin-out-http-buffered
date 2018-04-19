@@ -23,6 +23,11 @@ module Fluent
     # open timeout for the http call
     config_param :http_open_timeout, :float, default: 2.0
 
+    # nil | 'none' | 'basic'
+    config_param :authentication, :string, :default => nil
+    config_param :username, :string, :default => ''
+    config_param :password, :string, :default => '', :secret => true
+
     def configure(conf)
       super
 
@@ -36,6 +41,12 @@ module Fluent
       rescue URI::InvalidURIError
         raise Fluent::ConfigError, 'endpoint_url invalid'
       end
+
+      @auth = case @authentication
+              when 'basic' then :basic
+              else
+                :none
+              end
 
       # Parse http statuses
       @statuses = @http_retry_statuses.split(',').map { |status| status.to_i }
@@ -66,12 +77,16 @@ module Fluent
     def write(chunk)
       data = []
       chunk.msgpack_each do |(tag, time, record)|
-        data << [tag, time, record]
+        data << record
       end
 
       begin
         response = @http.start do |http|
           request = create_request(data)
+          if @auth and @auth == :basic
+            request.basic_auth(@username, @password)
+          end
+
           http.request request
         end
 
